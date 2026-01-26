@@ -1,0 +1,56 @@
+{
+  "name": "open-music-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node dist/server.js",
+    "dev": "nodemon src/server.ts",
+    "build": "npm run build:ts && npm run build:alias",
+    "build:ts": "tsc",
+    "build:alias": "tsc-alias",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "migrate": "npx node-pg-migrate -d src/database/migrations -m src/database/migrations up",
+    "migrate:create": "npx node-pg-migrate -j ts -d src/database/migrations -m src/database/migrations create",
+    "migrate:down": "npx node-pg-migrate -d src/database/migrations -m src/database/migrations down"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dianerdiana-learning/open-music-api.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/dianerdiana-learning/open-music-api/issues"
+  },
+  "homepage": "https://github.com/dianerdiana-learning/open-music-api#readme",
+  "dependencies": {
+    "dotenv": "^17.2.3",
+    "express": "^5.2.1",
+    "joi": "^18.0.2",
+    "nanoid": "^5.1.6",
+    "node-pg-migrate": "^8.0.4",
+    "pg": "^8.17.2"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.2",
+    "@types/express": "^5.0.6",
+    "@types/node": "^25.0.10",
+    "@types/pg": "^8.16.0",
+    "@typescript-eslint/eslint-plugin": "^8.53.1",
+    "@typescript-eslint/parser": "^8.53.1",
+    "eslint": "^9.39.2",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.5",
+    "globals": "^17.1.0",
+    "nodemon": "^3.1.11",
+    "ts-node": "^10.9.2",
+    "tsc-alias": "^1.8.16",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.53.1"
+  }
+}
