@@ -1,36 +1,28 @@
 import { db } from '@/database/index.js';
+
 import { AlbumEntity } from '../../domain/entities/album.entity.js';
-import { type AlbumRow, mapAlbumRowToEntity } from '../../interface/mappers/album.mapper.js';
+import { type AlbumRow, mapAlbumRowToEntity } from '../mappers/album.mapper.js';
 
 const tableName = 'albums';
 
-export const AlbumRepository = {
-  save: async (album: AlbumEntity): Promise<AlbumEntity | null> => {
-    const result = await db.query<AlbumRow>(
-      `INSERT INTO ${tableName}(name, year) VALUES ($1, $2) RETURNING *`,
-      [album.name, album.year],
+export const albumRepository = {
+  save: async (album: AlbumEntity): Promise<void> => {
+    await db.query<AlbumRow>(
+      `INSERT INTO albums (id, name, year, created_at, updated_at)
+       VALUES ($1, $2, $3, $4, $5)
+       ON CONFLICT (id) DO UPDATE
+       SET
+        name = EXCLUDED.name,
+        year = EXCLUDED.year,
+        updated_at = EXCLUDED.updated_at
+       RETURNING *
+       `,
+      [album.id, album.name, album.year, album.createdAt, album.updatedAt],
     );
-
-    const newAlbumRow = result.rows[0];
-    if (!newAlbumRow) return null;
-
-    return mapAlbumRowToEntity(newAlbumRow);
   },
 
   findById: async (id: string): Promise<AlbumEntity | null> => {
     const result = await db.query<AlbumRow>(`SELECT * FROM ${tableName} WHERE id=$1`, [id]);
-
-    const existingAlbum = result.rows[0];
-    if (!existingAlbum) return null;
-
-    return mapAlbumRowToEntity(existingAlbum);
-  },
-
-  update: async (id: string, album: AlbumEntity): Promise<AlbumEntity | null> => {
-    const result = await db.query<AlbumRow>(
-      `UPDATE ${tableName} SET name=$1,year=$2 WHERE id=$3 RETURNING *`,
-      [album.name, album.year, id],
-    );
 
     const existingAlbum = result.rows[0];
     if (!existingAlbum) return null;

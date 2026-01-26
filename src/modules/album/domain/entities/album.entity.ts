@@ -27,6 +27,12 @@ export class AlbumEntity implements Album {
     const timestamp = new Date().toISOString();
     const id = uuidv7();
 
-    return new AlbumEntity({ ...payload, id, createdAt: timestamp, updatedAt: timestamp });
+    return new AlbumEntity({
+      id,
+      name: payload.name,
+      year: Number(payload.year),
+      createdAt: timestamp,
+      updatedAt: timestamp,
+    });
   }
 }

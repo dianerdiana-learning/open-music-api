@@ -1,5 +1,7 @@
 {
   "compilerOptions": {
+    "typeRoots": ["./node_modules/@types", "./src/@types"],
+
     // File Layout
     "rootDir": "./src",
     "outDir": "./dist",
@@ -7,7 +9,10 @@
       "@/*": ["./*"],
       "@/configs/*": ["configs/*"],
       "@/database/*": ["database/*"],
-      "@/modules/*": ["modules/*"]
+      "@/middlewares/*": ["middlewares/*"],
+      "@/modules/*": ["modules/*"],
+      "@/responses/*": ["responses/*"],
+      "@/shared/*": ["shared/*"]
     },
 
     // Environment Settings
@@ -37,6 +42,6 @@
     "skipLibCheck": true,
     "baseUrl": "./src"
   },
-  "include": ["src/**/*"],
+  "include": ["src/**/*", "src/@types/express.d.ts"],
   "exclude": ["node_modules", "dist"]
 }
