@@ -1,5 +1,5 @@
 import { Pool, type PoolClient, type QueryResult, type QueryResultRow } from 'pg';
-import { env } from '@/configs/env.config.js';
+import { env } from '../configs/env.config.js';
 
 export class Database {
   private pool: Pool;
