@@ -50,6 +50,13 @@ export class SongEntity implements Song {
     const timestamp = new Date().toISOString();
     const id = uuidv7();
 
-    return new SongEntity({ ...payload, id, createdAt: timestamp, updatedAt: timestamp });
+    return new SongEntity({
+      ...payload,
+      id,
+      year: Number(payload.year),
+      duration: payload.duration ?? Number(payload.duration),
+      createdAt: timestamp,
+      updatedAt: timestamp,
+    });
   }
 }

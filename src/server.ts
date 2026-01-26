@@ -4,6 +4,7 @@ import { env } from './configs/env.config.js';
 import { errorHandler } from './middlewares/error-handler.js';
 
 import { albumRoute } from './modules/album/interface/routes/album.route.js';
+import { songRoute } from './modules/song/interface/routes/song.route.js';
 
 const app: Application = express();
 const port = env.app.port;
@@ -16,6 +17,7 @@ app.use((req: Request, res: Response, next: NextFunction) => {
   next();
 });
 app.use('/albums', albumRoute);
+app.use('/songs', songRoute);
 
 app.use(errorHandler);
 
