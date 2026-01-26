@@ -1,5 +1,5 @@
 export interface GetSongListDto {
   title?: string;
   performer?: string;
-  filters?: { field: string; value: string | number }[];
+  filters?: { field: 'album_id'; value: string | number }[];
 }

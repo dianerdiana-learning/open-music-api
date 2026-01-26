@@ -9,6 +9,7 @@ import { updateAlbumUseCase } from '../../application/use-cases/update-album.use
 import { deleteAlbumUseCase } from '../../application/use-cases/delete-album.use-case.js';
 
 import { AlbumResponse } from '../responses/album.response.js';
+import { SongResponse } from '@/modules/song/interface/responses/song.response.js';
 
 import { response } from '@/shared/utility/response.js';
 
@@ -22,11 +23,14 @@ export const albumController = {
 
   getAlbumById: async (req: Request, res: Response) => {
     const id = req.params.id as string;
-    const album = await getAlbumByIdUseCase(id);
+    const result = await getAlbumByIdUseCase(id);
+    const album = new AlbumResponse(result.album);
+    const songs = result.songs.map((song) => new SongResponse(song));
 
-    const albumResponse = new AlbumResponse(album);
-
-    return response.success({ res, data: { album: albumResponse } });
+    return response.success({
+      res,
+      data: { album: { ...album, songs } },
+    });
   },
 
   updateAlbum: async (req: Request, res: Response) => {
@@ -34,9 +38,8 @@ export const albumController = {
     const dto = req.body as UpdateAlbumDto;
 
     const album = await updateAlbumUseCase(id, dto);
-    const albumResponse = new AlbumResponse(album);
 
-    return response.updated({ res, data: { album: albumResponse } });
+    return response.updated({ res, data: { album: new AlbumResponse(album) } });
   },
 
   deleteAlbum: async (req: Request, res: Response) => {
