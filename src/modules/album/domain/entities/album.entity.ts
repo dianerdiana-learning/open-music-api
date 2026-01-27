@@ -4,6 +4,7 @@ export interface Album {
   id: string;
   name: string;
   year: number;
+  cover?: string | null | undefined;
   createdAt: string;
   updatedAt: string;
 }
@@ -12,13 +13,15 @@ export class AlbumEntity implements Album {
   id: string;
   name: string;
   year: number;
+  cover?: string | null | undefined;
   createdAt: string;
   updatedAt: string;
 
-  constructor({ id, name, year, createdAt, updatedAt }: Album) {
+  constructor({ id, name, year, cover, createdAt, updatedAt }: Album) {
     this.id = id;
     this.name = name;
     this.year = year;
+    this.cover = cover;
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;
   }
@@ -28,8 +31,8 @@ export class AlbumEntity implements Album {
     const id = uuidv7();
 
     return new AlbumEntity({
+      ...payload,
       id,
-      name: payload.name,
       year: Number(payload.year),
       createdAt: timestamp,
       updatedAt: timestamp,
