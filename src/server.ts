@@ -6,6 +6,7 @@ import { errorHandler } from './middlewares/error-handler.js';
 import { albumRoute } from './modules/album/interface/routes/album.route.js';
 import { songRoute } from './modules/song/interface/routes/song.route.js';
 import { userRoute } from './modules/user/interface/routes/user.route.js';
+import { authRoute } from './modules/auth/interface/routes/auth.route.js';
 
 const app: Application = express();
 const port = env.app.port;
@@ -20,6 +21,7 @@ app.use((req: Request, res: Response, next: NextFunction) => {
 app.use('/albums', albumRoute);
 app.use('/songs', songRoute);
 app.use('/users', userRoute);
+app.use('/authentications', authRoute);
 
 app.use(errorHandler);
 
