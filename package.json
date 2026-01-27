@@ -11,9 +11,9 @@
     "build:alias": "tsc-alias",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "migrate": "npx node-pg-migrate -d src/database/migrations -m src/database/migrations up",
-    "migrate:create": "npx node-pg-migrate -j ts -d src/database/migrations -m src/database/migrations create",
-    "migrate:down": "npx node-pg-migrate -d src/database/migrations -m src/database/migrations down"
+    "migrate": "node-pg-migrate -d ./migrations -m ./migrations up",
+    "migrate:create": "node-pg-migrate -j ts -d ./migrations -m ./migrations create",
+    "migrate:down": "node-pg-migrate -d ./migrations -m ./migrations down"
   },
   "repository": {
     "type": "git",

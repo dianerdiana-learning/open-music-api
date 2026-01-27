@@ -1,14 +1,22 @@
 import { MigrationBuilder } from 'node-pg-migrate';
 
 export async function up(pgm: MigrationBuilder): Promise<void> {
-  pgm.createTable('albums', {
+  pgm.createTable('playlist_songs', {
     id: {
-      type: 'uuid',
+      type: 'varchar(21)', // or text, depending on your comfort
       primaryKey: true,
-      default: pgm.func('gen_random_uuid()'),
+      notNull: true,
     },
-    name: { type: 'varchar(255)', notNull: true },
-    year: { type: 'integer', notNull: true },
+    playlist_id: {
+      type: 'varchar(21)',
+      references: 'playlists',
+      onDelete: 'CASCADE',
+    },
+    song_id: {
+      type: 'varchar(21)',
+      references: 'songs',
+      onDelete: 'CASCADE',
+    },
     created_at: {
       type: 'timestamp',
       notNull: true,
@@ -23,5 +31,5 @@ export async function up(pgm: MigrationBuilder): Promise<void> {
 }
 
 export async function down(pgm: MigrationBuilder): Promise<void> {
-  pgm.dropTable('albums');
+  pgm.dropTable('playlist_songs');
 }
