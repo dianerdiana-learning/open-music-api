@@ -3,7 +3,7 @@ import { MigrationBuilder } from 'node-pg-migrate';
 export async function up(pgm: MigrationBuilder): Promise<void> {
   pgm.createTable('users', {
     id: {
-      type: 'varchar(21)', // or text, depending on your comfort
+      type: 'varchar(50)', // or text, depending on your comfort
       primaryKey: true,
       notNull: true,
     },

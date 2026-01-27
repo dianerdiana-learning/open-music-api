@@ -3,17 +3,17 @@ import { MigrationBuilder } from 'node-pg-migrate';
 export async function up(pgm: MigrationBuilder): Promise<void> {
   pgm.createTable('user_album_likes', {
     id: {
-      type: 'varchar(21)', // or text, depending on your comfort
+      type: 'varchar(50)', // or text, depending on your comfort
       primaryKey: true,
       notNull: true,
     },
     user_id: {
-      type: 'varchar(21)',
+      type: 'varchar(50)',
       references: 'users',
       onDelete: 'CASCADE',
     },
     album_id: {
-      type: 'varchar(21)',
+      type: 'varchar(50)',
       references: 'albums',
       onDelete: 'CASCADE',
     },

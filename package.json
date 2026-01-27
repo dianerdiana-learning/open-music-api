@@ -28,16 +28,20 @@
   },
   "homepage": "https://github.com/dianerdiana-learning/open-music-api#readme",
   "dependencies": {
+    "bcrypt": "^6.0.0",
     "dotenv": "^17.2.3",
     "express": "^5.2.1",
     "joi": "^18.0.2",
+    "jsonwebtoken": "^9.0.3",
     "node-pg-migrate": "^8.0.4",
     "pg": "^8.17.2",
     "uuid": "^13.0.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.2",
+    "@types/bcrypt": "^6.0.0",
     "@types/express": "^5.0.6",
+    "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^25.0.10",
     "@types/pg": "^8.16.0",
     "@typescript-eslint/eslint-plugin": "^8.53.1",
