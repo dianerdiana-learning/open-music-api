@@ -18,11 +18,11 @@ export const signInUseCase = async (dto: SignInDto) => {
   if (!isMatched) throw new UnauthorizedError('User is not found');
 
   const accessToken = tokenManager.generateAccessToken({
-    userId: user.id,
+    id: user.id,
     username: user.username,
   });
   const refreshToken = tokenManager.generateRefreshToken({
-    userId: user.id,
+    id: user.id,
     username: user.username,
   });
 

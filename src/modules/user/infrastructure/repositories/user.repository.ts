@@ -20,7 +20,10 @@ export const userRepository = {
   },
 
   findById: async (userId: string): Promise<UserEntity | null> => {
-    const result = await db.query<UserRow>(`SELECT * FROM users WHERE id=$1`, [userId]);
+    const result = await db.query<UserRow>(
+      `SELECT id,fullname,username,created_at,updated_at FROM users WHERE id=$1`,
+      [userId],
+    );
 
     const userRow = result.rows[0];
     if (!userRow) return null;
@@ -38,9 +41,10 @@ export const userRepository = {
   },
 
   findByIds: async (userIds: string[]): Promise<UserEntity[]> => {
-    const result = await db.query<UserRow>(`SELECT * FROM users WHERE id = ANY($1::text[])`, [
-      userIds,
-    ]);
+    const result = await db.query<UserRow>(
+      `SELECT id,fullname,username,created_at,updated_at FROM users WHERE id = ANY($1::text[])`,
+      [userIds],
+    );
     return result.rows.map((userRow) => mapUserRowToEntity(userRow));
   },
 };

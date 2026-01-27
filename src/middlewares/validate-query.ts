@@ -13,7 +13,7 @@ export const validateQuery =
       throw error;
     }
 
-    req.validated = value;
+    req.validatedQuery = value;
 
     next();
   };

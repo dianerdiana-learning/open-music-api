@@ -15,7 +15,7 @@ export const validateParams =
       throw new NotFoundError('Data is not found');
     }
 
-    req.validated = value;
+    req.validatedParams = value;
 
     next();
   };

@@ -7,15 +7,15 @@ import { BadRequestError } from '@/shared/errors/app-error.js';
 export const refreshTokenUseCase = async (dto: RefreshTokenDto) => {
   const { refreshToken } = dto;
 
-  const { userId, username } = tokenManager.verifyToken(refreshToken, 'refresh');
-  const auth = await authRepository.findByUserId(userId);
+  const { id, username } = tokenManager.verifyToken(refreshToken, 'refresh');
+  const auth = await authRepository.findByUserId(id);
 
   if (!auth || auth.refreshToken !== refreshToken) {
     throw new BadRequestError('Invalid token');
   }
 
   const accessToken = tokenManager.generateAccessToken({
-    userId,
+    id,
     username,
   });
 

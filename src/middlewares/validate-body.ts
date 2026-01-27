@@ -13,7 +13,7 @@ export const validateBody =
       throw error;
     }
 
-    req.validated = value;
+    req.validatedBody = value;
 
     next();
   };

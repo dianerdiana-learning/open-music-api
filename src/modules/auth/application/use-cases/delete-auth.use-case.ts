@@ -6,8 +6,8 @@ import { BadRequestError } from '@/shared/errors/app-error.js';
 
 export const deleteAuthUseCase = async (dto: RefreshTokenDto) => {
   const { refreshToken } = dto;
-  const { userId } = tokenManager.verifyToken(refreshToken, 'refresh');
-  const auth = await authRepository.findByUserId(userId);
+  const { id } = tokenManager.verifyToken(refreshToken, 'refresh');
+  const auth = await authRepository.findByUserId(id);
 
   if (!auth || auth.refreshToken !== refreshToken) {
     throw new BadRequestError('Invalid token');

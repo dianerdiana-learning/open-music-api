@@ -10,21 +10,21 @@ import { response } from '@/shared/utility/response.js';
 
 export const authController = {
   signIn: async (req: Request, res: Response) => {
-    const dto = req.body as SignInDto;
+    const dto = req.validatedBody as SignInDto;
     const result = await signInUseCase(dto);
 
     return response.created({ res, data: result });
   },
 
   refreshToken: async (req: Request, res: Response) => {
-    const dto = req.body as RefreshTokenDto;
+    const dto = req.validatedBody as RefreshTokenDto;
     const result = await refreshTokenUseCase(dto);
 
     return response.success({ res, data: result });
   },
 
   deleteToken: async (req: Request, res: Response) => {
-    const dto = req.body as RefreshTokenDto;
+    const dto = req.validatedBody as RefreshTokenDto;
     const result = await deleteAuthUseCase(dto);
 
     return response.deleted({ res, data: result });

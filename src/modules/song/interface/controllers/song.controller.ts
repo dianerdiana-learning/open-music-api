@@ -16,14 +16,14 @@ import { response } from '@/shared/utility/response.js';
 
 export const songController = {
   createSong: async (req: Request, res: Response) => {
-    const payload = req.body as CreateSongDto;
+    const payload = req.validatedBody as CreateSongDto;
     const song = await createSongUseCase(payload);
 
     return response.created({ res, data: { songId: song.id } });
   },
 
   getSongById: async (req: Request, res: Response) => {
-    const id = req.params.id as string;
+    const { id } = req.validatedParams;
     const song = await getSongByIdUseCase(id);
 
     return response.success({ res, data: { song: new SongResponse(song) } });
@@ -40,15 +40,15 @@ export const songController = {
   },
 
   updateSong: async (req: Request, res: Response) => {
-    const id = req.params.id as string;
-    const dto = req.body as UpdateSongDto;
+    const { id } = req.validatedParams;
+    const dto = req.validatedBody as UpdateSongDto;
     const song = await updateSongUseCase(id, dto);
 
     return response.updated({ res, data: { song: new SongResponse(song) } });
   },
 
   deleteSong: async (req: Request, res: Response) => {
-    const id = req.params.id as string;
+    const { id } = req.validatedParams;
     const result = await deleteSongUseCase(id);
 
     return response.deleted({ res, data: result });

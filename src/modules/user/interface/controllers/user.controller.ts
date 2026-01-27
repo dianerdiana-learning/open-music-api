@@ -7,7 +7,7 @@ import { response } from '@/shared/utility/response.js';
 
 export const userController = {
   createUser: async (req: Request, res: Response) => {
-    const dto = req.body as CreateUserDto;
+    const dto = req.validatedBody as CreateUserDto;
 
     const user = await createUserUseCase(dto);
 

@@ -15,14 +15,14 @@ import { response } from '@/shared/utility/response.js';
 
 export const albumController = {
   createAlbum: async (req: Request, res: Response) => {
-    const payload = req.body as CreateAlbumDto;
-    const album = await createAlbumUseCase(payload);
+    const dto = req.validatedBody as CreateAlbumDto;
+    const album = await createAlbumUseCase(dto);
 
     return response.created({ res, data: { albumId: album.id } });
   },
 
   getAlbumById: async (req: Request, res: Response) => {
-    const id = req.params.id as string;
+    const { id } = req.validatedParams;
     const result = await getAlbumByIdUseCase(id);
     const album = new AlbumResponse(result.album);
     const songs = result.songs.map((song) => new SongResponse(song));
@@ -34,8 +34,8 @@ export const albumController = {
   },
 
   updateAlbum: async (req: Request, res: Response) => {
-    const id = req.params.id as string;
-    const dto = req.body as UpdateAlbumDto;
+    const { id } = req.validatedParams;
+    const dto = req.validatedBody as UpdateAlbumDto;
 
     const album = await updateAlbumUseCase(id, dto);
 
@@ -43,7 +43,7 @@ export const albumController = {
   },
 
   deleteAlbum: async (req: Request, res: Response) => {
-    const id = req.params.id as string;
+    const { id } = req.validatedParams;
     const result = await deleteAlbumUseCase(id);
 
     return response.deleted({ res, data: result });
