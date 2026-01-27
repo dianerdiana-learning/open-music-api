@@ -34,7 +34,7 @@ export class PlaylistSongActivityEntity implements PlaylistSongActivity {
     this.updatedAt = updatedAt;
   }
 
-  static create(payload: Omit<PlaylistSongActivity, 'id' | 'createdAt' | 'updatedAt'>) {
+  static create(payload: Omit<PlaylistSongActivity, 'id' | 'time' | 'createdAt' | 'updatedAt'>) {
     const timestamp = new Date().toISOString();
     return new PlaylistSongActivityEntity({
       ...payload,

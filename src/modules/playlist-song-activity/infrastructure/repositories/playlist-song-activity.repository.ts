@@ -5,7 +5,7 @@ import {
   type PlaylistSongActivityRow,
 } from '../mappers/playlist-song-activity.mapper.js';
 
-export const playlistSongRepository = {
+export const playlistSongActivityRepository = {
   save: async (playlistSongActivity: PlaylistSongActivityEntity): Promise<void> => {
     await db.query<PlaylistSongActivityRow>(
       `INSERT INTO playlist_song_activities (id, playlist_id, song_id, user_id, action, time, created_at, updated_at)
