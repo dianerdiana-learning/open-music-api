@@ -3,11 +3,11 @@ import { playlistRepository } from '../../infrastructure/repositories/playlist.r
 import { userRepository } from '@/modules/user/infrastructure/repositories/user.repository.js';
 
 export const deletePlaylistUseCase = async (userId: string, playlistId: string) => {
-  const playlist = await playlistRepository.findById(playlistId);
-  if (!playlist) throw new NotFoundError('Playlist is not found');
-
   const user = await userRepository.findById(userId);
   if (!user) throw new UnauthorizedError('Invalid Credentials');
+
+  const playlist = await playlistRepository.findById(playlistId);
+  if (!playlist) throw new NotFoundError('Playlist is not found');
 
   const isOwner = playlist.owner === userId;
   if (!isOwner) throw new ForbiddenError('Forbidden Request');

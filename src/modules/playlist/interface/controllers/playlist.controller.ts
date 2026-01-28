@@ -16,6 +16,7 @@ import { deleteSongFromPlaylistUseCase } from '../../application/use-cases/delet
 import { response } from '@/shared/utility/response.js';
 import type { AuthCredential } from '@/shared/types/auth-credential.type.js';
 import { SongResponse } from '@/modules/song/interface/responses/song.response.js';
+import { getPlaylistActivityListUseCase } from '../../application/use-cases/get-playlist-activity-list.use-case.js';
 
 export const playlistController = {
   createPlaylist: async (req: Request, res: Response) => {
@@ -66,6 +67,20 @@ export const playlistController = {
           ...playlist,
           songs: playlist.songs.map((song) => new SongResponse(song)),
         }),
+      },
+    });
+  },
+
+  getPlaylistActivites: async (req: Request, res: Response) => {
+    const { id } = req.validatedParams;
+    const user = req.user as AuthCredential;
+
+    const { playlist, activites } = await getPlaylistActivityListUseCase(id, user.id);
+    return response.success({
+      res,
+      data: {
+        playlistId: playlist.id,
+        activites,
       },
     });
   },

@@ -2,10 +2,9 @@ import { userRepository } from '@/modules/user/infrastructure/repositories/user.
 import { playlistRepository } from '../../infrastructure/repositories/playlist.repository.js';
 
 import { ForbiddenError, NotFoundError, UnauthorizedError } from '@/shared/errors/app-error.js';
-import { playlistSongRepository } from '@/modules/playlist-song/infrastructure/repositories/playlist-song.repository.js';
-import { songRepository } from '@/modules/song/infrastructure/repositories/song.repository.js';
+import { playlistSongActivityRepository } from '@/modules/playlist-song-activity/infrastructure/repositories/playlist-song-activity.repository.js';
 
-export const getPlaylistByIdUseCase = async (playlistId: string, userId: string) => {
+export const getPlaylistActivityListUseCase = async (playlistId: string, userId: string) => {
   const user = await userRepository.findById(userId);
   if (!user) throw new UnauthorizedError('Invalid Credentials');
 
@@ -15,14 +14,10 @@ export const getPlaylistByIdUseCase = async (playlistId: string, userId: string)
   const owner = playlist.owner === userId;
   if (!owner) throw new ForbiddenError('Forbidden request');
 
-  const playlistSongs = await playlistSongRepository.findAllByPlaylistIdsOrSongIds([playlistId]);
-
-  const songIds = [...new Set(playlistSongs.map((ps) => ps.songId))];
-  const songs = songIds.length ? await songRepository.findByIds(songIds) : [];
+  const activites = await playlistSongActivityRepository.findAllByPlaylistId(playlistId);
 
   return {
-    ...playlist,
-    user: user,
-    songs,
+    playlist,
+    activites,
   };
 };

@@ -12,15 +12,49 @@ import { uuidSchema } from '@/shared/validators/uuid.schema.js';
 
 const router = Router();
 
-// prettier-ignore
-{
-  router.post('/', authenticateToken, validateBody(createPlaylistSchema), playlistController.createPlaylist);
-  router.get('/', authenticateToken, playlistController.getPlaylists);
-  router.delete('/:id', authenticateToken, validateParams(uuidSchema('id')), playlistController.deletePlaylist);
+// POST: create new playlist
+router.post(
+  '/',
+  authenticateToken,
+  validateBody(createPlaylistSchema),
+  playlistController.createPlaylist,
+);
 
-  router.post('/:id/songs', authenticateToken, validateParams(uuidSchema('id')), validateBody(songIdSchema), playlistController.addSongToPlaylist);
-  router.get('/:id/songs', authenticateToken, validateParams(uuidSchema('id')), playlistController.getPlaylistSongs);
-  router.delete('/:id/songs', authenticateToken, validateParams(uuidSchema('id')), validateBody(songIdSchema), playlistController.deleteSongFromPlaylist)
-}
+// GET: owned playlists
+router.get('/', authenticateToken, playlistController.getPlaylists);
+
+// DELETE: playlist
+router.delete(
+  '/:id',
+  authenticateToken,
+  validateParams(uuidSchema('id')),
+  playlistController.deletePlaylist,
+);
+
+// POST: add a song to playlist
+router.post(
+  '/:id/songs',
+  authenticateToken,
+  validateParams(uuidSchema('id')),
+  validateBody(songIdSchema),
+  playlistController.addSongToPlaylist,
+);
+
+// GET: playlist with songs
+router.get(
+  '/:id/songs',
+  authenticateToken,
+  validateParams(uuidSchema('id')),
+  playlistController.getPlaylistSongs,
+);
+
+// DELETE: remove a song from playlists
+router.delete(
+  '/:id/songs',
+  authenticateToken,
+  validateParams(uuidSchema('id')),
+  validateBody(songIdSchema),
+  playlistController.deleteSongFromPlaylist,
+);
 
 export { router as playlistRoute };
