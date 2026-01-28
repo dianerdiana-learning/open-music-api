@@ -8,14 +8,17 @@ import { assignPlaylistActivityService } from '@/modules/playlist-song-activity/
 import { ForbiddenError, NotFoundError } from '@/shared/errors/app-error.js';
 import { PLAYLIST_SONG_ACTIVITY_ACTIONS } from '@/shared/constants/playlist-song-activity-actions.constant.js';
 
-export const addSongToPlaylistUseCase = async (dto: AddSongToPlaylistDto) => {
-  const { playlistId, songId, userId } = dto;
+interface Dto extends AddSongToPlaylistDto {
+  hasAccess?: boolean | undefined;
+}
+
+export const addSongToPlaylistUseCase = async (dto: Dto) => {
+  const { playlistId, songId, userId, hasAccess } = dto;
+
+  if (!hasAccess) throw new ForbiddenError('Forbidden Request');
 
   const playlist = await playlistRepository.findById(playlistId);
   if (!playlist) throw new NotFoundError('Playlist is not found');
-
-  const isOwner = playlist.owner === userId;
-  if (!isOwner) throw new ForbiddenError('Forbidden Request');
 
   const song = await songRepository.findById(songId);
   if (!song) throw new NotFoundError('Song is not found');

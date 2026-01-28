@@ -18,17 +18,23 @@ export const playlistRepository = {
     );
   },
 
-  findAllOwned: async (userId: string): Promise<PlaylistEntity[]> => {
-    const result = await db.query<PlaylistRow>(`SELECT * FROM playlists WHERE owner=$1`, [userId]);
-    return result.rows.map((row) => mapPlaylistRowToEntity(row));
-  },
+  findAll: async (userId: string, playlistIds?: string[]): Promise<PlaylistEntity[]> => {
+    const conditions = [`owner = $1`];
+    const params: any = [userId];
 
-  findAllByIds: async (playlistIds: string[]): Promise<PlaylistEntity[]> => {
-    const result = await db.query<PlaylistRow>(
-      `SELECT * FROM playlists WHERE id = ANY($1::text[])`,
-      [playlistIds],
-    );
-    return result.rows.map((r) => mapPlaylistRowToEntity(r));
+    if (playlistIds) {
+      params.push(playlistIds);
+      conditions.push(`id = ANY($${params.length}::text[])`);
+    }
+
+    let query = `SELECT * FROM playlists`;
+
+    if (conditions.length > 0) {
+      query += ` WHERE ` + conditions.join(' OR ');
+    }
+
+    const result = await db.query<PlaylistRow>(query, params);
+    return result.rows.map((row) => mapPlaylistRowToEntity(row));
   },
 
   findById: async (playlistId: string): Promise<PlaylistEntity | null> => {

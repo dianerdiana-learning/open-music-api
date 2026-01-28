@@ -54,6 +54,18 @@ export const collaborationRepository = {
     return result.rows.map((row) => mapCollaborationRowToEntity(row));
   },
 
+  findOne: async (playlistId: string, userId: string) => {
+    const result = await db.query<CollaborationRow>(
+      `SELECT * FROM collaborations WHERE playlist_id=$1 AND user_id=$2`,
+      [playlistId, userId],
+    );
+
+    const collaborationRow = result.rows[0];
+    if (!collaborationRow) return null;
+
+    return mapCollaborationRowToEntity(collaborationRow);
+  },
+
   delete: async (playlistId: string, userId: string): Promise<boolean> => {
     await db.query(`DELETE FROM collaborations WHERE playlist_id=$1 AND user_id=$2`, [
       playlistId,

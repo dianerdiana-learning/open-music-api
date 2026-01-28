@@ -9,51 +9,44 @@ import { createPlaylistSchema } from '../../application/validators/create-playli
 import { songIdSchema } from '../../application/validators/song-id-schema.schema.js';
 
 import { uuidSchema } from '@/shared/validators/uuid.schema.js';
+import { validateFeatureAccess } from '../middlewares/validate-feature-access.middleware.js';
 
 const router = Router();
 
+router.use(authenticateToken);
+
 // POST: create new playlist
-router.post(
-  '/',
-  authenticateToken,
-  validateBody(createPlaylistSchema),
-  playlistController.createPlaylist,
-);
+router.post('/', validateBody(createPlaylistSchema), playlistController.createPlaylist);
 
 // GET: owned playlists
-router.get('/', authenticateToken, playlistController.getPlaylists);
+router.get('/', playlistController.getPlaylists);
 
 // DELETE: playlist
-router.delete(
-  '/:id',
-  authenticateToken,
-  validateParams(uuidSchema('id')),
-  playlistController.deletePlaylist,
-);
+router.delete('/:id', validateParams(uuidSchema('id')), playlistController.deletePlaylist);
 
 // POST: add a song to playlist
 router.post(
   '/:id/songs',
-  authenticateToken,
   validateParams(uuidSchema('id')),
   validateBody(songIdSchema),
+  validateFeatureAccess,
   playlistController.addSongToPlaylist,
 );
 
 // GET: playlist with songs
 router.get(
   '/:id/songs',
-  authenticateToken,
   validateParams(uuidSchema('id')),
+  validateFeatureAccess,
   playlistController.getPlaylistSongs,
 );
 
 // DELETE: remove a song from playlists
 router.delete(
   '/:id/songs',
-  authenticateToken,
   validateParams(uuidSchema('id')),
   validateBody(songIdSchema),
+  validateFeatureAccess,
   playlistController.deleteSongFromPlaylist,
 );
 

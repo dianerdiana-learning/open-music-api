@@ -8,14 +8,17 @@ import type { DeleteSongFromPlaylistDto } from '../dtos/delete-song-from-playlis
 import { ForbiddenError, NotFoundError } from '@/shared/errors/app-error.js';
 import { PLAYLIST_SONG_ACTIVITY_ACTIONS } from '@/shared/constants/playlist-song-activity-actions.constant.js';
 
-export const deleteSongFromPlaylistUseCase = async (dto: DeleteSongFromPlaylistDto) => {
-  const { playlistId, songId, userId } = dto;
+interface Dto extends DeleteSongFromPlaylistDto {
+  hasAccess?: boolean | undefined;
+}
+
+export const deleteSongFromPlaylistUseCase = async (dto: Dto) => {
+  const { playlistId, songId, userId, hasAccess } = dto;
+
+  if (!hasAccess) throw new ForbiddenError('Forbidden Request');
 
   const playlist = await playlistRepository.findById(playlistId);
   if (!playlist) throw new NotFoundError('Playlist is not found');
-
-  const isOwner = playlist.owner === userId;
-  if (!isOwner) throw new ForbiddenError('Forbidden Request');
 
   const song = await songRepository.findById(songId);
   if (!song) throw new NotFoundError('Song is not found');

@@ -1,6 +1,9 @@
+import type { NextFunction, Request, Response } from 'express';
+
+import { userRepository } from '@/modules/user/infrastructure/repositories/user.repository.js';
+
 import { UnauthorizedError } from '@/shared/errors/app-error.js';
 import { tokenManager } from '@/shared/security/jwt.service.js';
-import type { NextFunction, Request, Response } from 'express';
 
 export const authenticateToken = async (req: Request, res: Response, next: NextFunction) => {
   const token = req.headers.authorization;
@@ -8,7 +11,11 @@ export const authenticateToken = async (req: Request, res: Response, next: NextF
   if (token && token.indexOf('Bearer ') !== -1) {
     try {
       const bearerToken = token.split('Bearer ')[1] || '';
-      const user = tokenManager.verifyToken(bearerToken, 'access');
+      const { id } = tokenManager.verifyToken(bearerToken, 'access');
+
+      const user = await userRepository.findById(id);
+      if (!user) throw new UnauthorizedError('User no longer exists');
+
       req.user = user;
       return next();
     } catch (error) {

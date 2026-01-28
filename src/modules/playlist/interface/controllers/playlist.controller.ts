@@ -2,6 +2,7 @@ import type { Request, Response } from 'express';
 
 import { UserResponse } from '@/modules/user/interface/responses/user.response.js';
 import { PlaylistResponse, PlaylistWithSongsResponse } from '../responses/playlist.response.js';
+import { SongResponse } from '@/modules/song/interface/responses/song.response.js';
 
 import type { SongIdDto } from '../../application/dtos/song-id-dto.dto.js';
 import type { CreatePlaylistDto } from '../../application/dtos/create-playlist.dto.js';
@@ -10,13 +11,13 @@ import { getAllPlaylistsUseCase } from '../../application/use-cases/get-all-play
 import { createPlaylistUseCase } from '../../application/use-cases/create-playlist.use-case.js';
 import { deletePlaylistUseCase } from '../../application/use-cases/delete-playlist.use-case.js';
 import { addSongToPlaylistUseCase } from '../../application/use-cases/add-song-to-playlist.use-case.js';
-import { getPlaylistByIdUseCase } from '../../application/use-cases/get-playlist-by-id.use-case.js';
+import { getPlaylistSongsUseCase } from '../../application/use-cases/get-playlist-songs.use-case.js';
 import { deleteSongFromPlaylistUseCase } from '../../application/use-cases/delete-song-from-playlist.use-case.js';
+import { getPlaylistActivityListUseCase } from '../../application/use-cases/get-playlist-activity-list.use-case.js';
+import type { ValidatedAccessRequest } from '../types/validate-access-request.type.js';
 
 import { response } from '@/shared/utility/response.js';
 import type { AuthCredential } from '@/shared/types/auth-credential.type.js';
-import { SongResponse } from '@/modules/song/interface/responses/song.response.js';
-import { getPlaylistActivityListUseCase } from '../../application/use-cases/get-playlist-activity-list.use-case.js';
 
 export const playlistController = {
   createPlaylist: async (req: Request, res: Response) => {
@@ -45,21 +46,29 @@ export const playlistController = {
     });
   },
 
-  addSongToPlaylist: async (req: Request, res: Response) => {
+  addSongToPlaylist: async (req: ValidatedAccessRequest, res: Response) => {
     const { id: playlistId } = req.validatedParams;
     const { songId } = req.validatedBody as SongIdDto;
     const { id: userId } = req.user as AuthCredential;
 
-    const playlist = await addSongToPlaylistUseCase({ playlistId, songId, userId });
+    const playlist = await addSongToPlaylistUseCase({
+      playlistId,
+      songId,
+      userId,
+      hasAccess: req.hasAccess,
+    });
 
     return response.created({ res, data: { playlistId: playlist.id } });
   },
 
-  getPlaylistSongs: async (req: Request, res: Response) => {
-    const { id } = req.validatedParams;
-    const user = req.user as AuthCredential;
+  getPlaylistSongs: async (req: ValidatedAccessRequest, res: Response) => {
+    const { id: playlistId } = req.validatedParams;
 
-    const playlist = await getPlaylistByIdUseCase(id, user.id);
+    const playlist = await getPlaylistSongsUseCase({
+      playlistId,
+      hasAccess: req.hasAccess,
+    });
+
     return response.success({
       res,
       data: {
@@ -94,12 +103,12 @@ export const playlistController = {
     return response.deleted({ res });
   },
 
-  deleteSongFromPlaylist: async (req: Request, res: Response) => {
+  deleteSongFromPlaylist: async (req: ValidatedAccessRequest, res: Response) => {
     const { id: playlistId } = req.validatedParams;
     const { songId } = req.validatedBody as SongIdDto;
     const { id: userId } = req.user as AuthCredential;
 
-    await deleteSongFromPlaylistUseCase({ playlistId, songId, userId });
+    await deleteSongFromPlaylistUseCase({ playlistId, songId, userId, hasAccess: req.hasAccess });
 
     return response.deleted({ res });
   },

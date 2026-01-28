@@ -1,3 +1,22 @@
-import type { NextFunction, Request, Response } from 'express';
+import type { NextFunction, Response } from 'express';
+import { checkFeatureAccessUseCase } from '../../application/use-cases/check-feature-access.use-case.js';
+import type { AuthCredential } from '@/shared/types/auth-credential.type.js';
+import type { ValidatedAccessRequest } from '../types/validate-access-request.type.js';
 
-export const validateFeatureAccess = (req: Request, res: Response, next: NextFunction) => {};
+export const validateFeatureAccess = async (
+  req: ValidatedAccessRequest,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const { id: playlistId } = req.validatedParams;
+    const { id: userId } = req.user as AuthCredential;
+
+    const hasAccess = await checkFeatureAccessUseCase(playlistId, userId);
+    req.hasAccess = hasAccess;
+
+    next();
+  } catch (error) {
+    next(error);
+  }
+};
