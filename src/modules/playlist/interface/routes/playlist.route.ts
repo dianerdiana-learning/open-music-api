@@ -50,4 +50,12 @@ router.delete(
   playlistController.deleteSongFromPlaylist,
 );
 
+// GET: playlist activities
+router.get(
+  '/:id/activities',
+  validateParams(uuidSchema('id')),
+  validateFeatureAccess,
+  playlistController.getPlaylistActivites,
+);
+
 export { router as playlistRoute };

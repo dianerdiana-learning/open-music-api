@@ -80,16 +80,19 @@ export const playlistController = {
     });
   },
 
-  getPlaylistActivites: async (req: Request, res: Response) => {
-    const { id } = req.validatedParams;
-    const user = req.user as AuthCredential;
+  getPlaylistActivites: async (req: ValidatedAccessRequest, res: Response) => {
+    const { id: playlistId } = req.validatedParams;
 
-    const { playlist, activites } = await getPlaylistActivityListUseCase(id, user.id);
+    const { playlist, activities } = await getPlaylistActivityListUseCase({
+      playlistId,
+      hasAccess: req.hasAccess,
+    });
+
     return response.success({
       res,
       data: {
         playlistId: playlist.id,
-        activites,
+        activities,
       },
     });
   },
