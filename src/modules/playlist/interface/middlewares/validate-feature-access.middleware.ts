@@ -5,7 +5,7 @@ import type { ValidatedAccessRequest } from '../types/validate-access-request.ty
 
 export const validateFeatureAccess = async (
   req: ValidatedAccessRequest,
-  res: Response,
+  _res: Response,
   next: NextFunction,
 ) => {
   try {

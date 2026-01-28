@@ -16,7 +16,7 @@ const port = env.app.port;
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-app.use((req: Request, res: Response, next: NextFunction) => {
+app.use((req: Request, _res: Response, next: NextFunction) => {
   console.log(`${req.method.toUpperCase()}: ${req.url}`);
   next();
 });

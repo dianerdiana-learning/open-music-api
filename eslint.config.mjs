@@ -31,14 +31,23 @@ export default [
       '@typescript-eslint': tseslint.plugin,
     },
     rules: {
-      // --- Custom rules for better DX ---
-      '@typescript-eslint/no-unused-vars': ['warn'],
+      'no-unused-vars': 'off',
+
+      '@typescript-eslint/no-unused-vars': [
+        'error',
+        {
+          args: 'all',
+          argsIgnorePattern: '^_',
+          varsIgnorePattern: '^_',
+          ignoreRestSiblings: true,
+        },
+      ],
+
       '@typescript-eslint/no-explicit-any': 'off',
       '@typescript-eslint/explicit-function-return-type': 'off',
       'no-console': 'off',
 
-      // Prettier integration
-      'prettier/prettier': 'off',
+      'prettier/prettier': ['error', { endOfLine: 'auto' }],
     },
   },
 ];

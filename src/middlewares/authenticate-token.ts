@@ -5,7 +5,7 @@ import { userRepository } from '@/modules/user/infrastructure/repositories/user.
 import { UnauthorizedError } from '@/shared/errors/app-error.js';
 import { tokenManager } from '@/shared/security/jwt.service.js';
 
-export const authenticateToken = async (req: Request, res: Response, next: NextFunction) => {
+export const authenticateToken = async (req: Request, _res: Response, next: NextFunction) => {
   const token = req.headers.authorization;
 
   if (token && token.indexOf('Bearer ') !== -1) {
