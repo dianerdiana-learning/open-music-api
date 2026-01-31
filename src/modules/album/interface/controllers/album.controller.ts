@@ -7,12 +7,16 @@ import { createAlbumUseCase } from '../../application/use-cases/create-album.use
 import { getAlbumByIdUseCase } from '../../application/use-cases/get-album-by-id.use-case.js';
 import { updateAlbumUseCase } from '../../application/use-cases/update-album.use-case.js';
 import { deleteAlbumUseCase } from '../../application/use-cases/delete-album.use-case.js';
+import { uploadAlbumCoverUseCase } from '../../application/use-cases/upload-album-cover.use-case.js';
+import { addLikeToAlbumUseCase } from '../../application/use-cases/add-like-to-album.use-case.js';
+import { deleteLikeFromAlbumUseCase } from '../../application/use-cases/delete-like-from-album.use-case.js';
 
 import { AlbumResponse } from '../responses/album.response.js';
 import { SongResponse } from '@/modules/song/interface/responses/song.response.js';
 
 import { response } from '@/shared/utility/response.js';
-import { uploadAlbumCoverUseCase } from '../../application/use-cases/upload-album-cover.use-case.js';
+import type { AuthCredential } from '@/shared/types/auth-credential.type.js';
+import { getAlbumLikeCountUseCase } from '../../application/use-cases/get-album-like-count.use-case.js';
 
 export const albumController = {
   createAlbum: async (req: Request, res: Response) => {
@@ -57,5 +61,31 @@ export const albumController = {
     const result = await deleteAlbumUseCase(id);
 
     return response.deleted({ res, data: result });
+  },
+
+  addAlbumLike: async (req: Request, res: Response) => {
+    const { id: albumId } = req.validatedParams;
+    const { id: userId } = req.user as AuthCredential;
+
+    const result = await addLikeToAlbumUseCase(userId, albumId);
+
+    return response.created({ res, data: result });
+  },
+
+  deleteAlbumLike: async (req: Request, res: Response) => {
+    const { id: albumId } = req.validatedParams;
+    const { id: userId } = req.user as AuthCredential;
+
+    const result = await deleteLikeFromAlbumUseCase(userId, albumId);
+
+    return response.deleted({ res, data: result });
+  },
+
+  getAlbumLikeCount: async (req: Request, res: Response) => {
+    const { id } = req.validatedParams;
+
+    const count = await getAlbumLikeCountUseCase(id);
+
+    return response.success({ res, data: { likes: count } });
   },
 };

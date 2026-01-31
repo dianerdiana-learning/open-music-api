@@ -45,6 +45,18 @@ export const albumLikeRepository = {
     return result.rows.map((row) => mapAlbumLikeRowToEntity(row));
   },
 
+  findOne: async (userId: string, albumId: string): Promise<AlbumLikeEntity | null> => {
+    const result = await db.query<AlbumLikeRow>(
+      `SELECT * FROM user_album_likes WHERE user_id=$1 AND album_id=$2`,
+      [userId, albumId],
+    );
+
+    const albumLikeRow = result.rows[0];
+    if (!albumLikeRow) return null;
+
+    return mapAlbumLikeRowToEntity(albumLikeRow);
+  },
+
   delete: async (albumId: string, userId: string): Promise<boolean> => {
     await db.query(`DELETE FROM user_album_likes WHERE album_id=$1 AND user_id=$2 RETURNING *`, [
       albumId,

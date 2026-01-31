@@ -7,6 +7,7 @@ import { updateAlbumSchema } from '../../application/validators/update-album.sch
 import { validateBody } from '@/middlewares/validate-body.js';
 import { validateParams } from '@/middlewares/validate-params.js';
 import { uploadMiddleware } from '@/middlewares/upload-middleware.js';
+import { authenticateToken } from '@/middlewares/authenticate-token.js';
 
 import { uuidSchema } from '@/shared/validators/uuid.schema.js';
 
@@ -27,5 +28,22 @@ router.post(
   uploadMiddleware('cover'),
   albumController.uploadCover,
 );
+
+// Album Like
+router.post(
+  '/:id/likes',
+  validateParams(uuidSchema('id')),
+  authenticateToken,
+  albumController.addAlbumLike,
+);
+
+router.delete(
+  '/:id/likes',
+  validateParams(uuidSchema('id')),
+  authenticateToken,
+  albumController.deleteAlbumLike,
+);
+
+router.get('/:id/likes', validateParams(uuidSchema('id')), albumController.getAlbumLikeCount);
 
 export { router as albumRoute };
