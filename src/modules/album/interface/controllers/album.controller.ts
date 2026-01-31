@@ -12,6 +12,7 @@ import { AlbumResponse } from '../responses/album.response.js';
 import { SongResponse } from '@/modules/song/interface/responses/song.response.js';
 
 import { response } from '@/shared/utility/response.js';
+import { uploadAlbumCoverUseCase } from '../../application/use-cases/upload-album-cover.use-case.js';
 
 export const albumController = {
   createAlbum: async (req: Request, res: Response) => {
@@ -40,6 +41,15 @@ export const albumController = {
     const album = await updateAlbumUseCase(id, dto);
 
     return response.updated({ res, data: { album: new AlbumResponse(album) } });
+  },
+
+  uploadCover: async (req: Request, res: Response) => {
+    const { id } = req.validatedParams;
+    const filename = req.file?.filename;
+
+    await uploadAlbumCoverUseCase(id, { cover: filename });
+
+    return response.created({ res, message: 'Sampul berhasil diunggah' });
   },
 
   deleteAlbum: async (req: Request, res: Response) => {

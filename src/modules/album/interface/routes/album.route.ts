@@ -1,5 +1,3 @@
-// prettier-ignore
-
 import { Router } from 'express';
 
 import { albumController } from '../controllers/album.controller.js';
@@ -8,6 +6,7 @@ import { updateAlbumSchema } from '../../application/validators/update-album.sch
 
 import { validateBody } from '@/middlewares/validate-body.js';
 import { validateParams } from '@/middlewares/validate-params.js';
+import { uploadMiddleware } from '@/middlewares/upload-middleware.js';
 
 import { uuidSchema } from '@/shared/validators/uuid.schema.js';
 
@@ -22,5 +21,11 @@ router.put(
   albumController.updateAlbum,
 );
 router.delete('/:id', validateParams(uuidSchema('id')), albumController.deleteAlbum);
+router.post(
+  '/:id/covers',
+  validateParams(uuidSchema('id')),
+  uploadMiddleware('cover'),
+  albumController.uploadCover,
+);
 
 export { router as albumRoute };

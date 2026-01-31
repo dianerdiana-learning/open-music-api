@@ -1,4 +1,6 @@
 import express, { type Application, type NextFunction, type Request, type Response } from 'express';
+import { fileURLToPath } from 'url';
+import path from 'path';
 
 import { env } from './configs/env.config.js';
 import { rabbitMQConfig } from './configs/rabbitmq.config.js';
@@ -12,11 +14,18 @@ import { playlistRoute } from './modules/playlist/interface/routes/playlist.rout
 import { collaborationRoute } from './modules/collaboration/interface/routes/collaboration.route.js';
 import { exportRoute } from './modules/export/interface/routes/export.route.js';
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 const app: Application = express();
 const port = env.app.port;
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+
+// Static Path
+const uploadPath = path.join(__dirname, '../uploads');
+app.use(express.static(uploadPath));
 
 app.use((req: Request, _res: Response, next: NextFunction) => {
   console.log(`${req.method.toUpperCase()}: ${req.url}`);

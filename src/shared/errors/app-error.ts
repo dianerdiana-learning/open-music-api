@@ -40,3 +40,9 @@ export class NotFoundError extends AppError {
     super(message, 404);
   }
 }
+
+export class MaxFileSizeError extends AppError {
+  constructor(message: string) {
+    super(message, 413);
+  }
+}
