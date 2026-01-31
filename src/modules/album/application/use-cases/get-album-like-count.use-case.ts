@@ -14,8 +14,6 @@ export const getAlbumLikeCountUseCase = async (id: string) => {
 
   const response = { likes: 0, source: DATA_SOURCES.database };
 
-  console.log({ cacheValue });
-
   if (cacheValue) {
     response.likes = Number(cacheValue);
     response.source = DATA_SOURCES.cache;
