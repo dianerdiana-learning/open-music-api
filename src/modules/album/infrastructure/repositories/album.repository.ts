@@ -8,16 +8,17 @@ const tableName = 'albums';
 export const albumRepository = {
   save: async (album: AlbumEntity): Promise<void> => {
     await db.query<AlbumRow>(
-      `INSERT INTO albums (id, name, year, created_at, updated_at)
-       VALUES ($1, $2, $3, $4, $5)
+      `INSERT INTO albums (id, name, year, cover, created_at, updated_at)
+       VALUES ($1, $2, $3, $4, $5, $6)
        ON CONFLICT (id) DO UPDATE
        SET
         name = EXCLUDED.name,
         year = EXCLUDED.year,
+        cover = EXCLUDED.cover,
         updated_at = EXCLUDED.updated_at
        RETURNING *
        `,
-      [album.id, album.name, album.year, album.createdAt, album.updatedAt],
+      [album.id, album.name, album.year, album.cover, album.createdAt, album.updatedAt],
     );
   },
 

@@ -34,7 +34,7 @@ export const uploadMiddleware = (fieldName: string) => {
     }
   };
 
-  const sizeInMb = 5;
+  const sizeInMb = 0.5;
   const upload = multer({
     storage,
     fileFilter,
@@ -46,12 +46,12 @@ export const uploadMiddleware = (fieldName: string) => {
     upload(req, res, (err: any) => {
       // Handle Error dari fileFilter manual
       if ((req as any).fileValidationError) {
-        throw new BadRequestError((req as any).fileValidationError);
+        return next(new BadRequestError((req as any).fileValidationError));
       }
 
       // Handle jika file tidak ada
       if (!req.file && !err) {
-        throw new BadRequestError('Cover is not found');
+        return next(new BadRequestError('Cover is not found'));
       }
 
       // Handle Error dari Multer (termasuk Limit Size)
@@ -59,10 +59,10 @@ export const uploadMiddleware = (fieldName: string) => {
         let message = err.message;
         if (err.code === 'LIMIT_FILE_SIZE') {
           message = `Maksimal ukuran gambar adalah ${sizeInMb}Mb`;
-          throw new MaxFileSizeError(message);
+          return next(new MaxFileSizeError(message));
         }
 
-        throw new BadRequestError(message);
+        return next(new BadRequestError(message));
       }
 
       next();
