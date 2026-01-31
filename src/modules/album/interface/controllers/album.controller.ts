@@ -84,8 +84,9 @@ export const albumController = {
   getAlbumLikeCount: async (req: Request, res: Response) => {
     const { id } = req.validatedParams;
 
-    const count = await getAlbumLikeCountUseCase(id);
+    const { likes, source } = await getAlbumLikeCountUseCase(id);
 
-    return response.success({ res, data: { likes: count } });
+    res.set({ 'X-Data-Source': source });
+    return response.success({ res, data: { likes } });
   },
 };

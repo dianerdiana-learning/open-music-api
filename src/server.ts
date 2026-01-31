@@ -4,6 +4,8 @@ import path from 'path';
 
 import { env } from './configs/env.config.js';
 import { rabbitMQConfig } from './configs/rabbitmq.config.js';
+import { redisConfig } from './configs/redis.config.js';
+
 import { errorHandler } from './middlewares/error-handler.js';
 
 import { albumRoute } from './modules/album/interface/routes/album.route.js';
@@ -45,6 +47,7 @@ const startServer = async () => {
   try {
     // 1. Inisialisasi RabbitMQ
     await rabbitMQConfig.connect();
+    await redisConfig.connect();
 
     // 2. Jalankan Express
     const server = app.listen(port, () => {
