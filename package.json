@@ -28,6 +28,7 @@
   },
   "homepage": "https://github.com/dianerdiana-learning/open-music-api#readme",
   "dependencies": {
+    "amqplib": "^0.10.9",
     "bcrypt": "^6.0.0",
     "dotenv": "^17.2.3",
     "express": "^5.2.1",
@@ -35,10 +36,12 @@
     "jsonwebtoken": "^9.0.3",
     "node-pg-migrate": "^8.0.4",
     "pg": "^8.17.2",
+    "redis": "^5.10.0",
     "uuid": "^13.0.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.2",
+    "@types/amqplib": "^0.10.8",
     "@types/bcrypt": "^6.0.0",
     "@types/express": "^5.0.6",
     "@types/jsonwebtoken": "^9.0.10",
