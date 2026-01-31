@@ -20,9 +20,7 @@ export const authenticateToken = async (req: Request, _res: Response, next: Next
       const cacheValue = await redisConfig.getCache(cacheKey);
 
       if (cacheValue) {
-        const user = JSON.parse(cacheValue);
-
-        req.user = user;
+        req.user = cacheValue;
       } else {
         const user = await userRepository.findById(id);
         if (!user) throw new UnauthorizedError('User no longer exists');
