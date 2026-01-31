@@ -1,7 +1,6 @@
 import { createClient, type RedisClientType } from 'redis';
 import { env } from './env.config.js';
-
-const CACHE_EXPIRED_TIME = 60 * 30;
+import { CACHE_EXPIRED_TIME } from '@/shared/constants/cache-expired-time.js';
 
 export class RedisConfig {
   private client: RedisClientType;

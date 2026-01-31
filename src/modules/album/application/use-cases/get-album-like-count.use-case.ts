@@ -1,9 +1,12 @@
+import { redisConfig } from '@/configs/redis.config.js';
+
 import { albumLikeRepository } from '@/modules/album-like/infrastructure/repositories/album-like.repository.js';
 import { albumRepository } from '../../infrastructure/repositories/album.repository.js';
+
 import { NotFoundError } from '@/shared/errors/app-error.js';
-import { redisConfig } from '@/configs/redis.config.js';
 import { CACHES } from '@/shared/constants/caches.constant.js';
 import { DATA_SOURCES } from '@/shared/constants/data-sources.constant.js';
+import { CACHE_EXPIRED_TIME } from '@/shared/constants/cache-expired-time.js';
 
 export const getAlbumLikeCountUseCase = async (id: string) => {
   const cacheKey = CACHES.albumLike(id);
@@ -20,11 +23,10 @@ export const getAlbumLikeCountUseCase = async (id: string) => {
     const album = await albumRepository.findById(id);
     if (!album) throw new NotFoundError('Album is not found');
 
-    const cacheEx = 30 * 60;
     const albumLikes = await albumLikeRepository.findAllByPlaylistIdsOrSongIds([id]);
     const count = albumLikes.length;
 
-    await redisConfig.setCache(cacheKey, count, cacheEx);
+    await redisConfig.setCache(cacheKey, count, CACHE_EXPIRED_TIME);
     response.likes = count;
   }
 
